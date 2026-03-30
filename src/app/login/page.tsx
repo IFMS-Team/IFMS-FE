@@ -12,7 +12,7 @@ export default function LoginPage() {
         </div>
 
         <div className="glow-border rounded-2xl">
-          <div className="rounded-2xl border border-white/60 bg-white/50 p-8 shadow-xl shadow-purple-200/20 backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/60 bg-white/50 p-8 shadow-xl shadow-purple-200/20">
             <h2 className="mb-1 text-center text-[44px] font-bold uppercase text-[#09090B]">Welcome</h2>
             <p className="mb-6 text-center text-sm text-[#717179]">Smart campus asset management starts here.</p>
             <LoginForm />
