@@ -30,7 +30,6 @@ http.interceptors.response.use(
 
     if (status === 401 && typeof window !== 'undefined') {
       localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
       window.location.href = '/login';
     }
 
