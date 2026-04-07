@@ -28,7 +28,10 @@ http.interceptors.response.use(
   (error: AxiosError<ApiError>) => {
     const status = error.response?.status;
 
-    if (status === 401 && typeof window !== 'undefined') {
+    const url = error.config?.url ?? '';
+    const isAuthRequest = url.includes('/auth/login');
+
+    if (status === 401 && !isAuthRequest && typeof window !== 'undefined') {
       localStorage.removeItem('access_token');
       window.location.href = '/login';
     }
