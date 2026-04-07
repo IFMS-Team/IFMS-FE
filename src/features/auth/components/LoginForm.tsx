@@ -37,7 +37,7 @@ export function LoginForm({ onForgotPassword }: LoginFormProps) {
     e.preventDefault();
     setTouched({ username: true, password: true });
     if (!username.trim() || !password.trim()) return;
-    login.mutate({ email: username, password });
+    login.mutate({ username, password });
   };
 
   return (
