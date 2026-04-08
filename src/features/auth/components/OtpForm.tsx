@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback, FormEvent, KeyboardEvent, ClipboardEvent } from 'react';
-import Image from 'next/image';
-import { ArrowLeftIcon, SpinnerIcon } from '@/shared/components';
+import { ArrowLeftIcon, ImageButton, SpinnerIcon } from '@/shared/components';
 import { useForgotPassword, useVerifyOtp } from '../hooks';
 import type { ForgotPasswordPayload } from '../types';
 
@@ -147,17 +146,9 @@ export function OtpForm({ email, forgotData, onBack, onVerified }: OtpFormProps)
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </button>
-        <button
-          type="submit"
-          disabled={!isValid || verifyOtp.isPending}
-          className="relative flex cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <Image src="/images/auth/Button_mini.png" alt="" width={200} height={48} className="h-10 w-auto" draggable={false} />
-          <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white">
-            {verifyOtp.isPending && <SpinnerIcon />}
-            Tiếp tục
-          </span>
-        </button>
+        <ImageButton type="submit" variant="mini" disabled={!isValid || verifyOtp.isPending} loading={verifyOtp.isPending}>
+          Tiếp tục
+        </ImageButton>
       </div>
 
       {verifyOtp.isError && (

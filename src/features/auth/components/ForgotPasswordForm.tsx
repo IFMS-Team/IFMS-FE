@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import Image from 'next/image';
 import {
   ArrowLeftIcon,
-  SpinnerIcon,
+  ImageButton,
   UserIcon,
   EnvelopeIcon,
   PhoneIcon,
@@ -106,17 +105,9 @@ export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProp
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </button>
-        <button
-          type="submit"
-          disabled={!isValid || forgotPassword.isPending}
-          className="relative flex cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <Image src="/images/auth/Button_mini.png" alt="" width={200} height={48} className="h-10 w-auto" draggable={false} />
-          <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white">
-            {forgotPassword.isPending && <SpinnerIcon />}
-            Tiếp tục
-          </span>
-        </button>
+        <ImageButton type="submit" variant="mini" disabled={!isValid || forgotPassword.isPending} loading={forgotPassword.isPending}>
+          Tiếp tục
+        </ImageButton>
       </div>
 
       {forgotPassword.isError && (
