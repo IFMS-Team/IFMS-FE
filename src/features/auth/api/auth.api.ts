@@ -1,5 +1,5 @@
 import { http } from '@/services';
-import type { LoginPayload, LoginResponse, RegisterPayload, AuthResponse } from '../types';
+import type { LoginPayload, LoginResponse, ForgotPasswordPayload, ForgotPasswordResponse, RegisterPayload, AuthResponse } from '../types';
 import type { ApiResponse } from '@/types';
 
 const BASE = '/api/v1/auth';
@@ -7,6 +7,11 @@ const BASE = '/api/v1/auth';
 export const authApi = {
   login: async (payload: LoginPayload): Promise<string> => {
     const { data } = await http.post<LoginResponse>(`${BASE}/login`, payload);
+    return data.data;
+  },
+
+  forgotPassword: async (payload: ForgotPasswordPayload): Promise<string> => {
+    const { data } = await http.post<ForgotPasswordResponse>(`${BASE}/forgot-password`, payload);
     return data.data;
   },
 

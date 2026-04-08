@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store';
 import { ROUTES } from '@/configs';
 import { authApi } from '../api';
-import type { LoginPayload } from '../types';
+import type { LoginPayload, ForgotPasswordPayload } from '../types';
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (payload: ForgotPasswordPayload) => authApi.forgotPassword(payload),
+  });
+}
 
 export function useLogin() {
   const router = useRouter();

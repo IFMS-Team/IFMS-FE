@@ -4,12 +4,14 @@ import { useState, FormEvent } from 'react';
 import Image from 'next/image';
 import {
   ArrowLeftIcon,
+  SpinnerIcon,
   UserIcon,
   EnvelopeIcon,
   PhoneIcon,
   IdCardIcon,
 } from '@/shared/components';
 import { required, email, phoneVN, cccdVN, validate } from '@/shared/utils';
+import { useForgotPassword } from '../hooks';
 
 const INPUT_CLASS =
   'block w-full rounded-[6px] border border-gray-300 bg-white py-2.5 pr-4 pl-10 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 outline-none ring-2 ring-transparent transition-all focus:border-gray-900 focus:ring-gray-900/20';
@@ -17,9 +19,11 @@ const INPUT_CLASS =
 const INPUT_ERROR_CLASS =
   'block w-full rounded-[6px] border border-red-400 bg-white py-2.5 pr-4 pl-10 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 outline-none ring-2 ring-red-500/20 transition-all focus:border-red-500 focus:ring-red-500/30';
 
+import type { ForgotPasswordPayload } from '../types';
+
 interface ForgotPasswordFormProps {
   onBack: () => void;
-  onSubmit?: (email: string) => void;
+  onSuccess?: (email: string, data: ForgotPasswordPayload) => void;
 }
 
 const fields = [
@@ -34,9 +38,10 @@ type FieldKey = (typeof fields)[number]['key'];
 const INITIAL_VALUES = Object.fromEntries(fields.map((f) => [f.key, ''])) as Record<FieldKey, string>;
 const INITIAL_TOUCHED = Object.fromEntries(fields.map((f) => [f.key, false])) as Record<FieldKey, boolean>;
 
-export function ForgotPasswordForm({ onBack, onSubmit }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProps) {
   const [form, setForm] = useState(INITIAL_VALUES);
   const [touched, setTouched] = useState(INITIAL_TOUCHED);
+  const forgotPassword = useForgotPassword();
 
   const errors = Object.fromEntries(
     fields.map((f) => [f.key, touched[f.key] ? validate(form[f.key], ...f.rules) : ''])
@@ -55,8 +60,17 @@ export function ForgotPasswordForm({ onBack, onSubmit }: ForgotPasswordFormProps
     const allTouched = Object.fromEntries(fields.map((f) => [f.key, true])) as Record<FieldKey, boolean>;
     setTouched(allTouched);
     if (!isValid) return;
-    onSubmit?.(form.email);
-    // TODO: call forgot password API
+
+    const payload: ForgotPasswordPayload = {
+      username: form.username,
+      email: form.email,
+      phone: form.phone,
+      cccd: form.idCard,
+    };
+
+    forgotPassword.mutate(payload, {
+      onSuccess: () => onSuccess?.(form.email, payload),
+    });
   };
 
   return (
@@ -94,15 +108,22 @@ export function ForgotPasswordForm({ onBack, onSubmit }: ForgotPasswordFormProps
         </button>
         <button
           type="submit"
-          disabled={!isValid}
+          disabled={!isValid || forgotPassword.isPending}
           className="relative flex cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Image src="/images/auth/Button_mini.png" alt="" width={200} height={48} className="h-10 w-auto" draggable={false} />
           <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white">
+            {forgotPassword.isPending && <SpinnerIcon />}
             Tiếp tục
           </span>
         </button>
       </div>
+
+      {forgotPassword.isError && (
+        <p className="text-center text-sm text-red-500">
+          {(forgotPassword.error as { message?: string })?.message ?? 'Có lỗi xảy ra, vui lòng thử lại.'}
+        </p>
+      )}
     </form>
   );
 }
