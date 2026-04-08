@@ -29,7 +29,16 @@ export interface AuthResponse {
 }
 
 export interface ForgotPasswordPayload {
+  username: string;
   email: string;
+  phone: string;
+  cccd: string;
+}
+
+export interface ForgotPasswordResponse {
+  data: string;
+  message: string;
+  status: number;
 }
 
 export interface ResetPasswordPayload {

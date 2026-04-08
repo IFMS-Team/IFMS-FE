@@ -2,21 +2,25 @@
 
 import { useState, useRef, useEffect, useCallback, FormEvent, KeyboardEvent, ClipboardEvent } from 'react';
 import Image from 'next/image';
-import { ArrowLeftIcon } from '@/shared/components';
+import { ArrowLeftIcon, SpinnerIcon } from '@/shared/components';
+import { useForgotPassword } from '../hooks';
+import type { ForgotPasswordPayload } from '../types';
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 30;
 
 interface OtpFormProps {
   email: string;
+  forgotData: ForgotPasswordPayload;
   onBack: () => void;
   onSubmit?: (otp: string) => void;
 }
 
-export function OtpForm({ email, onBack, onSubmit }: OtpFormProps) {
+export function OtpForm({ email, forgotData, onBack, onSubmit }: OtpFormProps) {
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [countdown, setCountdown] = useState(RESEND_SECONDS);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const resend = useForgotPassword();
 
   useEffect(() => {
     inputsRef.current[0]?.focus();
@@ -80,9 +84,10 @@ export function OtpForm({ email, onBack, onSubmit }: OtpFormProps) {
   };
 
   const handleResend = () => {
-    if (countdown > 0) return;
-    setCountdown(RESEND_SECONDS);
-    // TODO: call resend OTP API
+    if (countdown > 0 || resend.isPending) return;
+    resend.mutate(forgotData, {
+      onSuccess: () => setCountdown(RESEND_SECONDS),
+    });
   };
 
   return (
@@ -113,11 +118,22 @@ export function OtpForm({ email, onBack, onSubmit }: OtpFormProps) {
         {countdown > 0 ? (
           <>Gửi lại OTP ({countdown}s)</>
         ) : (
-          <button type="button" onClick={handleResend} className="cursor-pointer font-medium text-black hover:underline">
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={resend.isPending}
+            className="inline-flex cursor-pointer items-center gap-1 font-medium text-black hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {resend.isPending && <SpinnerIcon className="h-3 w-3" />}
             Gửi lại OTP
           </button>
         )}
       </p>
+      {resend.isError && (
+        <p className="text-center text-sm text-red-500">
+          {(resend.error as { message?: string })?.message ?? 'Gửi lại OTP thất bại.'}
+        </p>
+      )}
 
       <div className="flex items-center justify-between pt-2">
         <button

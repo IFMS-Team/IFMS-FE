@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Squircle } from 'corner-smoothing';
 import { LoginForm, ForgotPasswordForm, OtpForm } from '@/features/auth';
 import { PhoneIcon, MailIcon } from '@/shared/components';
+import type { ForgotPasswordPayload } from '@/features/auth/types';
 
 type View = 'login' | 'forgot' | 'otp';
 
@@ -16,10 +17,12 @@ const HEADINGS: Record<View, { title: string; subtitle?: string }> = {
 export default function LoginPage() {
   const [view, setView] = useState<View>('login');
   const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotData, setForgotData] = useState<ForgotPasswordPayload | null>(null);
   const heading = HEADINGS[view];
 
-  const handleForgotSubmit = (email: string) => {
+  const handleForgotSuccess = (email: string, data: ForgotPasswordPayload) => {
     setForgotEmail(email);
+    setForgotData(data);
     setView('otp');
   };
 
@@ -43,10 +46,10 @@ export default function LoginPage() {
               <LoginForm onForgotPassword={() => setView('forgot')} />
             )}
             {view === 'forgot' && (
-              <ForgotPasswordForm onBack={() => setView('login')} onSubmit={handleForgotSubmit} />
+              <ForgotPasswordForm onBack={() => setView('login')} onSuccess={handleForgotSuccess} />
             )}
-            {view === 'otp' && (
-              <OtpForm email={forgotEmail} onBack={() => setView('forgot')} />
+            {view === 'otp' && forgotData && (
+              <OtpForm email={forgotEmail} forgotData={forgotData} onBack={() => setView('forgot')} />
             )}
           </Squircle>
         </div>

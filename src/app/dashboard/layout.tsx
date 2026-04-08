@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useUIStore } from '@/store';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuthStore, useUIStore } from '@/store';
 import { ErrorBoundary, ProtectedRoute } from '@/shared/components';
+import { ROUTES } from '@/configs';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: HomeIcon },
@@ -14,7 +15,14 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { isSidebarOpen, toggleSidebar } = useUIStore();
+  const clearAuth = useAuthStore((s) => s.clearAuth);
+
+  const handleLogout = () => {
+    clearAuth();
+    router.push(ROUTES.LOGIN);
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -48,6 +56,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             );
           })}
         </nav>
+
+        <div className="border-t border-gray-200 px-3 py-4">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-red-50 hover:text-red-600"
+          >
+            <LogoutIcon className="h-5 w-5" />
+            Đăng xuất
+          </button>
+        </div>
       </aside>
 
       {isSidebarOpen && (
@@ -112,6 +130,14 @@ function ClipboardIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    </svg>
+  );
+}
+
+function LogoutIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
     </svg>
   );
 }
