@@ -41,7 +41,25 @@ export interface ForgotPasswordResponse {
   status: number;
 }
 
+export interface VerifyOtpPayload {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyOtpResponse {
+  data: string;
+  message: string;
+  status: number;
+}
+
 export interface ResetPasswordPayload {
-  token: string;
-  password: string;
+  reset_token: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface ResetPasswordResponse {
+  data: string;
+  message: string;
+  status: number;
 }

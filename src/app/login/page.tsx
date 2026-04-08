@@ -2,28 +2,39 @@
 
 import { useState } from 'react';
 import { Squircle } from 'corner-smoothing';
-import { LoginForm, ForgotPasswordForm, OtpForm } from '@/features/auth';
+import { LoginForm, ForgotPasswordForm, OtpForm, ResetPasswordForm } from '@/features/auth';
 import { PhoneIcon, MailIcon } from '@/shared/components';
 import type { ForgotPasswordPayload } from '@/features/auth/types';
 
-type View = 'login' | 'forgot' | 'otp';
+type View = 'login' | 'forgot' | 'otp' | 'reset';
 
 const HEADINGS: Record<View, { title: string; subtitle?: string }> = {
   login: { title: 'Chào mừng', subtitle: 'Nền tảng thông minh cho quản lý tài sản.' },
   forgot: { title: 'Quên mật khẩu', subtitle: 'Vui lòng nhập tất cả thông tin bên dưới' },
   otp: { title: 'Xác nhận OTP' },
+  reset: { title: 'Đặt lại mật khẩu' },
 };
 
 export default function LoginPage() {
   const [view, setView] = useState<View>('login');
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotData, setForgotData] = useState<ForgotPasswordPayload | null>(null);
+  const [resetToken, setResetToken] = useState('');
   const heading = HEADINGS[view];
 
   const handleForgotSuccess = (email: string, data: ForgotPasswordPayload) => {
     setForgotEmail(email);
     setForgotData(data);
     setView('otp');
+  };
+
+  const handleOtpVerified = (token: string) => {
+    setResetToken(token);
+    setView('reset');
+  };
+
+  const handleResetSuccess = () => {
+    setView('login');
   };
 
   return (
@@ -49,7 +60,10 @@ export default function LoginPage() {
               <ForgotPasswordForm onBack={() => setView('login')} onSuccess={handleForgotSuccess} />
             )}
             {view === 'otp' && forgotData && (
-              <OtpForm email={forgotEmail} forgotData={forgotData} onBack={() => setView('forgot')} />
+              <OtpForm email={forgotEmail} forgotData={forgotData} onBack={() => setView('forgot')} onVerified={handleOtpVerified} />
+            )}
+            {view === 'reset' && resetToken && (
+              <ResetPasswordForm email={forgotEmail} resetToken={resetToken} onSuccess={handleResetSuccess} />
             )}
           </Squircle>
         </div>
