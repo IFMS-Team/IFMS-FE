@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useUIStore } from '@/store';
-import { ErrorBoundary } from '@/shared/components';
+import { ErrorBoundary, ProtectedRoute } from '@/shared/components';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: HomeIcon },
@@ -75,7 +75,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         <main className="flex-1 overflow-y-auto p-6">
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ProtectedRoute>
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </ProtectedRoute>
         </main>
       </div>
     </div>
