@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import Image from 'next/image';
-import { EyeIcon, EyeOffIcon, HelpCircleIcon, SpinnerIcon, Tooltip } from '@/shared/components';
+import { EyeIcon, EyeOffIcon, HelpCircleIcon, ImageButton, Tooltip } from '@/shared/components';
 import { useLogin } from '../hooks';
 
 const INPUT_BASE =
@@ -109,18 +108,9 @@ export function LoginForm({ onForgotPassword }: LoginFormProps) {
       </div>
 
       {/* Submit */}
-      <button
-        type="submit"
-        
-        disabled={!username.trim() || !password.trim() || login.isPending}
-        className="relative flex w-full cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        <Image src="/images/auth/Button.png" alt="" width={400} height={48} className="w-full" draggable={false} priority />
-        <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white">
-          {login.isPending && <SpinnerIcon />}
-          Đăng nhập
-        </span>
-      </button>
+      <ImageButton type="submit" disabled={!username.trim() || !password.trim() || login.isPending} loading={login.isPending}>
+        Đăng nhập
+      </ImageButton>
       {/* API error */}
       {login.isError && (
         <p className="text-center text-sm text-red-500">

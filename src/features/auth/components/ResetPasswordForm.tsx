@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import Image from 'next/image';
-import { EyeIcon, EyeOffIcon, SpinnerIcon } from '@/shared/components';
+import { EyeIcon, EyeOffIcon, ImageButton } from '@/shared/components';
 import { useResetPassword } from '../hooks';
 
 const INPUT_BASE =
@@ -41,7 +40,6 @@ export function ResetPasswordForm({ email, resetToken, onSuccess }: ResetPasswor
     touched.confirm && confirmPassword.length > 0 && !passwordsMatch
       ? 'Mật khẩu xác nhận không khớp'
       : '';
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setTouched({ new: true, confirm: true });
@@ -58,7 +56,6 @@ export function ResetPasswordForm({ email, resetToken, onSuccess }: ResetPasswor
       <p className="text-center text-sm text-[#717179]">
         Vui lòng nhập mã OTP được gửi đến <strong className="text-[#09090B]">{email}</strong>
       </p>
-
       {/* New password */}
       <div>
         <label htmlFor="new-password" className="mb-1.5 block text-sm font-medium text-gray-700">
@@ -83,7 +80,6 @@ export function ResetPasswordForm({ email, resetToken, onSuccess }: ResetPasswor
           </button>
         </div>
       </div>
-
       {/* Confirm password */}
       <div>
         <label htmlFor="confirm-password" className="mb-1.5 block text-sm font-medium text-gray-700">
@@ -132,17 +128,9 @@ export function ResetPasswordForm({ email, resetToken, onSuccess }: ResetPasswor
       </div>
 
       {/* Submit */}
-      <button
-        type="submit"
-        disabled={!isValid || resetPassword.isPending}
-        className="relative flex w-full cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        <Image src="/images/auth/Button.png" alt="" width={400} height={48} className="w-full" draggable={false} />
-        <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white">
-          {resetPassword.isPending && <SpinnerIcon />}
-          Đặt lại mật khẩu
-        </span>
-      </button>
+      <ImageButton type="submit" disabled={!isValid || resetPassword.isPending} loading={resetPassword.isPending}>
+        Đặt lại mật khẩu
+      </ImageButton>
 
       {resetPassword.isError && (
         <p className="text-center text-sm text-red-500">

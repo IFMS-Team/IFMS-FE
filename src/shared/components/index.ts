@@ -1,4 +1,5 @@
 export { Button } from './Button';
+export { ImageButton } from './ImageButton';
 export { Input } from './Input';
 export { Table } from './Table';
 export type { Column } from './Table';
