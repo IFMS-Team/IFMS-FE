@@ -5,11 +5,23 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store';
 import { ROUTES } from '@/configs';
 import { authApi } from '../api';
-import type { LoginPayload, ForgotPasswordPayload } from '../types';
+import type { LoginPayload, ForgotPasswordPayload, VerifyOtpPayload, ResetPasswordPayload } from '../types';
 
 export function useForgotPassword() {
   return useMutation({
     mutationFn: (payload: ForgotPasswordPayload) => authApi.forgotPassword(payload),
+  });
+}
+
+export function useVerifyOtp() {
+  return useMutation({
+    mutationFn: (payload: VerifyOtpPayload) => authApi.verifyOtp(payload),
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: (payload: ResetPasswordPayload) => authApi.resetPassword(payload),
   });
 }
 

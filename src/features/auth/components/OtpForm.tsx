@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, FormEvent, KeyboardEvent, ClipboardEvent } from 'react';
 import Image from 'next/image';
 import { ArrowLeftIcon, SpinnerIcon } from '@/shared/components';
-import { useForgotPassword } from '../hooks';
+import { useForgotPassword, useVerifyOtp } from '../hooks';
 import type { ForgotPasswordPayload } from '../types';
 
 const OTP_LENGTH = 6;
@@ -13,14 +13,15 @@ interface OtpFormProps {
   email: string;
   forgotData: ForgotPasswordPayload;
   onBack: () => void;
-  onSubmit?: (otp: string) => void;
+  onVerified?: (resetToken: string) => void;
 }
 
-export function OtpForm({ email, forgotData, onBack, onSubmit }: OtpFormProps) {
+export function OtpForm({ email, forgotData, onBack, onVerified }: OtpFormProps) {
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [countdown, setCountdown] = useState(RESEND_SECONDS);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const resend = useForgotPassword();
+  const verifyOtp = useVerifyOtp();
 
   useEffect(() => {
     inputsRef.current[0]?.focus();
@@ -80,7 +81,10 @@ export function OtpForm({ email, forgotData, onBack, onSubmit }: OtpFormProps) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!isValid) return;
-    onSubmit?.(otp);
+    verifyOtp.mutate(
+      { email, otp },
+      { onSuccess: (resetToken) => onVerified?.(resetToken) },
+    );
   };
 
   const handleResend = () => {
@@ -145,15 +149,22 @@ export function OtpForm({ email, forgotData, onBack, onSubmit }: OtpFormProps) {
         </button>
         <button
           type="submit"
-          disabled={!isValid}
+          disabled={!isValid || verifyOtp.isPending}
           className="relative flex cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Image src="/images/auth/Button_mini.png" alt="" width={200} height={48} className="h-10 w-auto" draggable={false} />
           <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white">
+            {verifyOtp.isPending && <SpinnerIcon />}
             Tiếp tục
           </span>
         </button>
       </div>
+
+      {verifyOtp.isError && (
+        <p className="text-center text-sm text-red-500">
+          {(verifyOtp.error as { message?: string })?.message ?? 'Xác thực OTP thất bại.'}
+        </p>
+      )}
     </form>
   );
 }
