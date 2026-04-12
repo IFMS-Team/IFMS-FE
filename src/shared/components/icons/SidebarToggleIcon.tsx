@@ -1,0 +1,13 @@
+export function SidebarToggleIcon({ className = 'h-3.5 w-3.5' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M4.75 0.75V12.75M2.08333 0.75H11.4167C12.153 0.75 12.75 1.34695 12.75 2.08333V11.4167C12.75 12.153 12.153 12.75 11.4167 12.75H2.08333C1.34695 12.75 0.75 12.153 0.75 11.4167V2.08333C0.75 1.34695 1.34695 0.75 2.08333 0.75Z"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
