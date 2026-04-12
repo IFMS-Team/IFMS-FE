@@ -99,13 +99,12 @@ export function ResetPasswordForm({ email, resetToken, onSuccess }: ResetPasswor
             type="button"
             onClick={() => setShowConfirm(!showConfirm)}
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 transition-colors hover:text-gray-600"
-          >
+            >
             {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
           </button>
         </div>
         {confirmError && <p className="mt-1 text-sm text-red-500">{confirmError}</p>}
       </div>
-
       {/* Password rules checklist */}
       <div className="rounded-[6px] border border-gray-200 bg-white p-4">
         <p className="mb-2 text-sm font-medium text-gray-700">Mật khẩu phải bao gồm:</p>

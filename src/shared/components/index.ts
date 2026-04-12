@@ -7,6 +7,7 @@ export { Modal } from './Modal';
 export { Tooltip } from './Tooltip';
 export { ErrorBoundary } from './ErrorBoundary';
 export { ProtectedRoute } from './ProtectedRoute';
+export { Sidebar } from './Sidebar';
 export {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -17,6 +18,7 @@ export {
   IdCardIcon,
   MailIcon,
   PhoneIcon,
+  SidebarToggleIcon,
   SpinnerIcon,
   UserIcon,
 } from './icons';
