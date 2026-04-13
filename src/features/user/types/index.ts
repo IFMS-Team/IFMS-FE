@@ -1,28 +1,65 @@
-import type { Role } from '@/types';
+export type UserStatus = 'Enable' | 'Disable';
+
+export interface UserProfileRaw {
+  user_id: string;
+  username: string;
+  full_name: string;
+  email: string;
+  status: UserStatus;
+  phone: string;
+  address: string;
+  cccd: string;
+  role_id: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface UserProfile {
   id: string;
-  name: string;
+  username: string;
+  fullName: string;
   email: string;
-  role: Role;
+  status: UserStatus;
+  phone: string;
+  address: string;
+  cccd: string;
+  roleId: string;
   avatar?: string;
-  phone?: string;
-  department?: string;
   createdAt: string;
   updatedAt: string;
 }
 
+export function mapUserProfile(raw: UserProfileRaw): UserProfile {
+  return {
+    id: raw.user_id,
+    username: raw.username,
+    fullName: raw.full_name,
+    email: raw.email,
+    status: raw.status,
+    phone: raw.phone,
+    address: raw.address,
+    cccd: raw.cccd,
+    roleId: raw.role_id,
+    createdAt: raw.created_at,
+    updatedAt: raw.updated_at,
+  };
+}
+
 export interface CreateUserPayload {
-  name: string;
+  username: string;
+  full_name: string;
   email: string;
   password: string;
-  role: Role;
+  phone?: string;
+  address?: string;
+  cccd?: string;
+  role_id?: string;
 }
 
 export interface UpdateUserPayload {
-  name?: string;
+  full_name?: string;
   email?: string;
-  role?: Role;
   phone?: string;
-  department?: string;
+  address?: string;
+  role_id?: string;
 }

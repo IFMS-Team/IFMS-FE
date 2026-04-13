@@ -1,1 +1,1 @@
-export { useUsers, useUser, useCreateUser, useUpdateUser, useDeleteUser } from './useUsers';
+export { useMe, useUsers, useUser, useCreateUser, useUpdateUser, useDeleteUser } from './useUsers';

@@ -2,7 +2,7 @@ export { Button } from './Button';
 export { ImageButton } from './ImageButton';
 export { Input } from './Input';
 export { Table } from './Table';
-export type { Column } from './Table';
+export type { Column, TableProps, SortState, SortDirection, PaginationConfig } from './Table';
 export { Modal } from './Modal';
 export { Tooltip } from './Tooltip';
 export { ErrorBoundary } from './ErrorBoundary';
