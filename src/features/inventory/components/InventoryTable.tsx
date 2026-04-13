@@ -114,8 +114,8 @@ export function InventoryTable({ items, onToggle }: InventoryTableProps) {
       header: 'Hình ảnh',
       width: 'w-20',
       render: (item) => (
-        <div className="h-10 w-10 overflow-hidden rounded-lg bg-gray-100">
-          <Image src={item.image} alt={item.title} width={40} height={40} className="h-full w-auto object-cover" />
+        <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-gray-100">
+          <Image src={item.image} alt={item.title} fill sizes="40px" className="object-cover" />
         </div>
       ),
     },

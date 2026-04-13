@@ -23,15 +23,15 @@ export function InventoryCard({ item, onToggle }: InventoryCardProps) {
       {/* Top section */}
       <div className="flex gap-4 shadow-md mb-0.5 rounded-b-[12px] bg-[#FFFFFF]">
         <div
-          className="w-[120px] shrink-0 self-stretch overflow-hidden bg-gray-50"
+          className="relative w-[120px] shrink-0 self-stretch overflow-hidden bg-gray-50"
           style={{ boxShadow: '2px 0px 0px 0px #0000000D, 1px 0px 0px 0px #FFFFFF' }}
         >
           <Image
             src={item.image}
             alt={item.title}
-            width={120}
-            height={120}
-            className="h-full w-auto object-cover"
+            fill
+            sizes="120px"
+            className="object-cover"
           />
         </div>
 
