@@ -36,7 +36,7 @@ export function Sidebar() {
 
   const navigate = (href: string) => {
     router.push(href);
-    setSidebarOpen(false);
+    if (window.innerWidth < 768) setSidebarOpen(false);
   };
 
   const desktopWidth = isSidebarOpen ? 'md:w-40' : 'md:w-[72px]';
