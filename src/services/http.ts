@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { API_BASE_URL } from '@/configs';
+import { useAuthStore } from '@/store';
 import type { ApiError } from '@/types';
 
 const http = axios.create({
@@ -32,7 +33,7 @@ http.interceptors.response.use(
     const isAuthRequest = url.includes('/auth/login');
 
     if (status === 401 && !isAuthRequest && typeof window !== 'undefined') {
-      localStorage.removeItem('access_token');
+      useAuthStore.getState().clearAuth();
       window.location.href = '/login';
     }
 

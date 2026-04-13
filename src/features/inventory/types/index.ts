@@ -25,3 +25,27 @@ export interface AdjustInventoryPayload {
   quantity: number;
   reason: string;
 }
+
+export type InventoryStatus = 'active' | 'in-use' | 'damaged' | 'lost' | 'maintenance' | 'inactive';
+
+export type InventoryTab = 'list' | 'table';
+
+export type SortOption = 'newest' | 'oldest' | 'name-asc' | 'name-desc';
+
+export interface TagItem {
+  icon: 'clipboard' | 'document' | 'barcode';
+  label: string;
+}
+
+export interface InventoryItemData {
+  id: string;
+  numericId: string;
+  image: string;
+  categoryPath: string;
+  title: string;
+  status: InventoryStatus;
+  tags: TagItem[];
+  createdBy: string;
+  createdAt: string;
+  enabled: boolean;
+}
