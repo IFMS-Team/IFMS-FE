@@ -101,7 +101,7 @@ export function Sidebar() {
         </div>
 
         {/* Nav items */}
-        <nav className="flex-1 py-2 px-2 flex flex-col items-center">
+        <nav className="flex-1 py-2 px-2 flex flex-col items-center justify-between">
           <div className="flex flex-col items-center gap-2 rounded-[16px] bg-[#F4F4F5] p-[8px]">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -130,6 +130,40 @@ export function Sidebar() {
               </button>
             );
           })}
+          </div>
+
+          {/* Contact buttons */}
+          <div className={`flex flex-col gap-2 pb-2 ${isSidebarOpen ? '' : 'hidden'}`}>
+            <a href="tel:09111111123" className="relative block aspect-[10/3] overflow-hidden rounded-xl transition-transform hover:scale-105">
+              <Image
+                src="/assets/button/sp_btn_phone.png"
+                alt="Hotline"
+                fill
+                sizes="140px"
+                className="object-contain drop-shadow-md"
+              />
+              <div className="absolute inset-0 flex items-center pl-10">
+                <div>
+                  <p className="text-[6px] font-extrabold tracking-wider text-gray-500">HOTLINE</p>
+                  <p className="text-[10px] font-bold text-[#35746E]">09111111123</p>
+                </div>
+              </div>
+            </a>
+            <a href="mailto:hotro@ifms.com" className="relative block aspect-[10/3] overflow-hidden rounded-xl transition-transform hover:scale-105">
+              <Image
+                src="/assets/button/sp_btn_mail.png"
+                alt="Email"
+                fill
+                sizes="140px"
+                className="object-contain drop-shadow-md"
+              />
+              <div className="absolute inset-0 flex items-center pl-10">
+                <div>
+                  <p className="text-[6px] font-extrabold tracking-wider text-gray-500">EMAIL</p>
+                  <p className="text-[10px] font-bold text-[#D9622B]">hotro@ifms.com</p>
+                </div>
+              </div>
+            </a>
           </div>
         </nav>
       </aside>

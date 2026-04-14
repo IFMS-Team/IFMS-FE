@@ -47,7 +47,7 @@ export interface VerifyOtpPayload {
 }
 
 export interface VerifyOtpResponse {
-  data: string;
+  reset_token: string;
   message: string;
   status: number;
 }
