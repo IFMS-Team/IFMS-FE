@@ -23,7 +23,7 @@ export const authApi = {
 
   verifyOtp: async (payload: VerifyOtpPayload): Promise<string> => {
     const { data } = await http.post<VerifyOtpResponse>(`${BASE}/verify-otp`, payload);
-    return data.data;
+    return data.reset_token;
   },
 
   resetPassword: async (payload: ResetPasswordPayload): Promise<string> => {
@@ -36,9 +36,7 @@ export const authApi = {
     return data.data;
   },
 
-  logout: async (): Promise<void> => {
-    await http.post(`${BASE}/logout`);
-  },
+  logout: async (): Promise<void> => {},
 
   refreshToken: async (refreshToken: string): Promise<{ accessToken: string }> => {
     const { data } = await http.post<ApiResponse<{ accessToken: string }>>(`${BASE}/refresh`, {
