@@ -4,13 +4,13 @@ import { SpinnerIcon } from './icons';
 
 const VARIANTS = {
   long: {
-    src: '/images/auth/Button.png',
+    src: '/assets/images/auth/Button.png',
     width: 400,
     imgClass: 'w-full',
     btnClass: 'relative flex w-full cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
   },
   mini: {
-    src: '/images/auth/Button_mini.png',
+    src: '/assets/images/auth/Button_mini.png',
     width: 200,
     imgClass: 'h-10 w-auto',
     btnClass: 'relative flex cursor-pointer items-center justify-center transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',

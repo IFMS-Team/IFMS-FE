@@ -7,6 +7,7 @@ import { MOCK_ITEMS } from '../constants';
 import { InventoryToolbar } from './InventoryToolbar';
 import { InventoryCard } from './InventoryCard';
 import { InventoryTable } from './InventoryTable';
+import { InventoryCardGrid } from './InventoryCardGrid';
 
 export function InventoryPage() {
   const [activeTab, setActiveTab] = useState<InventoryTab>('list');
@@ -39,7 +40,7 @@ export function InventoryPage() {
         onSearchChange={setSearch}
       />
 
-      {activeTab === 'list' ? (
+      {activeTab === 'list' && (
         <div className="space-y-3 p-4">
           {filteredItems.map((item) => (
             <InventoryCard key={item.id} item={item} onToggle={handleToggle} />
@@ -53,10 +54,16 @@ export function InventoryPage() {
             </div>
           )}
         </div>
-      ) : (
+      )}
+
+      {activeTab === 'table' && (
         <div className="p-4">
           <InventoryTable items={filteredItems} onToggle={handleToggle} />
         </div>
+      )}
+
+      {activeTab === 'card' && (
+        <InventoryCardGrid items={filteredItems} onToggle={handleToggle} />
       )}
     </div>
   );

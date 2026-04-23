@@ -28,7 +28,7 @@ export interface AdjustInventoryPayload {
 
 export type InventoryStatus = 'active' | 'in-use' | 'damaged' | 'lost' | 'maintenance' | 'inactive';
 
-export type InventoryTab = 'list' | 'table';
+export type InventoryTab = 'list' | 'table' | 'card';
 
 export type SortOption = 'newest' | 'oldest' | 'name-asc' | 'name-desc';
 

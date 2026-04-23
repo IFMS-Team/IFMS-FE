@@ -1,9 +1,13 @@
 'use client';
 
-import { useState, useEffect, ReactNode } from 'react';
+import { useEffect, useSyncExternalStore, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store';
 import { ROUTES } from '@/configs';
+
+const emptySubscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -11,12 +15,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
+  const hydrated = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   useEffect(() => {
@@ -25,8 +24,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     }
   }, [hydrated, isAuthenticated, router]);
 
-  if (!hydrated) return null;
-  if (!isAuthenticated) return null;
+  if (!hydrated || !isAuthenticated) return null;
 
   return <>{children}</>;
 }
