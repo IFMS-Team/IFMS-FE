@@ -2,11 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import {
-  DotsIcon, ExportIcon, FilterIcon, InventoryIcon,
-  SearchIcon, SortIcon, TableIcon,
+  AmountIcon, CalendarIcon, DotsIcon, ExportIcon, FilterIcon,
+  GridIcon, InventoryIcon, SearchIcon, SortIcon, StatusIcon,
+  TableIcon, TagIcon,
 } from '@/shared/components/icons';
+import type { ComponentType } from 'react';
 import type { InventoryTab, SortOption } from '../types';
-import { SORT_OPTIONS, FILTER_OPTIONS } from '../constants';
+import { SORT_OPTIONS } from '../constants';
 
 interface InventoryToolbarProps {
   activeTab: InventoryTab;
@@ -15,10 +17,20 @@ interface InventoryToolbarProps {
   onSearchChange: (value: string) => void;
 }
 
+type FilterType = 'date' | 'tag' | 'status' | 'amount';
+
+const FILTER_GRID: { key: FilterType; label: string; icon: ComponentType<{ className?: string }> }[] = [
+  { key: 'date', label: 'Ngày', icon: CalendarIcon },
+  { key: 'tag', label: 'Nhãn', icon: TagIcon },
+  { key: 'status', label: 'Trạng thái', icon: StatusIcon },
+  { key: 'amount', label: 'Số lượng', icon: AmountIcon },
+];
+
 export function InventoryToolbar({ activeTab, onTabChange, search, onSearchChange }: InventoryToolbarProps) {
   const [showSort, setShowSort] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [showFilter, setShowFilter] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
   const [showSearch, setShowSearch] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,6 +67,10 @@ export function InventoryToolbar({ activeTab, onTabChange, search, onSearchChang
             <TableIcon className="h-4 w-4" />
             Bảng
           </TabButton>
+          <TabButton active={activeTab === 'card'} onClick={() => onTabChange('card')}>
+            <GridIcon className="h-4 w-4" />
+            Thẻ
+          </TabButton>
         </div>
 
         {/* Actions */}
@@ -84,18 +100,41 @@ export function InventoryToolbar({ activeTab, onTabChange, search, onSearchChang
 
           {/* Filter */}
           <div className="relative">
-            <ActionButton onClick={() => { setShowFilter(!showFilter); setShowSort(false); }}>
-              <FilterIcon className="h-4 w-4 text-[#717179]" />
-              <span className="hidden sm:inline">Bộ lọc</span>
+            <ActionButton
+              active={showFilter}
+              onClick={() => { setShowFilter(!showFilter); setShowSort(false); }}
+            >
+              <FilterIcon className={`h-4 w-4 ${showFilter ? 'text-[#7C3AED]' : 'text-[#717179]'}`} />
+              <span className={`hidden sm:inline ${showFilter ? 'text-[#7C3AED]' : ''}`}>Bộ lọc</span>
             </ActionButton>
             {showFilter && (
-              <Dropdown>
-                {FILTER_OPTIONS.map((label) => (
-                  <DropdownItem key={label} onClick={() => setShowFilter(false)}>
-                    {label}
-                  </DropdownItem>
-                ))}
-              </Dropdown>
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setShowFilter(false)} />
+                <div className="absolute left-0 top-full z-20 mt-2 w-56 rounded-2xl border border-gray-100 bg-white p-4 shadow-xl">
+                  <p className="mb-3 text-sm font-semibold text-gray-900">Thêm bộ lọc</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {FILTER_GRID.map(({ key, label, icon: Icon }) => {
+                      const isActive = activeFilter === key;
+                      return (
+                        <button
+                          key={key}
+                          onClick={() => {
+                            setActiveFilter(isActive ? null : key);
+                          }}
+                          className={`flex cursor-pointer flex-col items-center gap-2 rounded-xl px-3 py-4 transition-colors ${
+                            isActive
+                              ? 'bg-[#EDE9FE] text-[#7C3AED]'
+                              : 'bg-[#F9FAFB] text-[#6B7280] hover:bg-gray-100'
+                          }`}
+                        >
+                          <Icon className={`h-6 w-6 ${isActive ? 'text-[#7C3AED]' : 'text-[#9CA3AF]'}`} />
+                          <span className="text-xs font-medium">{label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
             )}
           </div>
 
@@ -142,11 +181,15 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
   );
 }
 
-function ActionButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+function ActionButton({ onClick, children, active }: { onClick: () => void; children: React.ReactNode; active?: boolean }) {
   return (
     <button
       onClick={onClick}
-      className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-[#09090B] transition-colors hover:bg-gray-50"
+      className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+        active
+          ? 'border-[#7C3AED] bg-[#EDE9FE] text-[#7C3AED]'
+          : 'border-gray-200 text-[#09090B] hover:bg-gray-50'
+      }`}
     >
       {children}
     </button>

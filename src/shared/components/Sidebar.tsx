@@ -32,7 +32,7 @@ export function Sidebar() {
 
   const userName = me?.fullName ?? '...';
   const userRole = me?.roleId ? (ROLE_DISPLAY[me.roleId] ?? me.roleId) : '...';
-  const userAvatar = me?.avatar || '/images/user/avater_default.png';
+  const userAvatar = me?.avatar || '/assets/images/user/avater_default.png';
 
   const navigate = (href: string) => {
     router.push(href);
@@ -133,8 +133,8 @@ export function Sidebar() {
           </div>
 
           {/* Contact buttons */}
-          <div className={`flex flex-col gap-2 pb-2 ${isSidebarOpen ? '' : 'hidden'}`}>
-            <a href="tel:09111111123" className="relative block aspect-[10/3] overflow-hidden rounded-xl transition-transform hover:scale-105">
+          <div className={`flex w-full flex-col gap-2 pb-2 ${isSidebarOpen ? '' : 'hidden'}`}>
+            <a href="tel:09111111123" className="relative block w-full aspect-10/3 overflow-hidden rounded-xl transition-transform hover:scale-105">
               <Image
                 src="/assets/button/sp_btn_phone.png"
                 alt="Hotline"
@@ -149,7 +149,7 @@ export function Sidebar() {
                 </div>
               </div>
             </a>
-            <a href="mailto:hotro@ifms.com" className="relative block aspect-[10/3] overflow-hidden rounded-xl transition-transform hover:scale-105">
+            <a href="mailto:hotro@ifms.com" className="relative block w-full aspect-10/3 overflow-hidden rounded-xl transition-transform hover:scale-105">
               <Image
                 src="/assets/button/sp_btn_mail.png"
                 alt="Email"
